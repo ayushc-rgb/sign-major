@@ -72,13 +72,22 @@ const Chatbot = ({ signData }) => {
       };
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
+      console.error('Chat error:', error);
+      
+      // Extract error message
+      let errorText = 'Sorry, I encountered an error. Please try again.';
+      if (error.response?.data?.detail) {
+        errorText = `Error: ${error.response.data.detail}`;
+      } else if (error.message) {
+        errorText = `Error: ${error.message}`;
+      }
+      
       const errorMessage = {
         role: 'assistant',
-        content: 'Sorry, I encountered an error. Please try again.',
+        content: errorText,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
-      console.error('Chat error:', error);
     } finally {
       setLoading(false);
     }

@@ -11,6 +11,51 @@ api_key = os.getenv("GEMINI_API_KEY")
 if api_key:
     genai.configure(api_key=api_key)
 
+# Shared model instance
+_chat_model = None
+
+def _get_or_initialize_model():
+    """Get or initialize Gemini model with fallback"""
+    global _chat_model
+    
+    if _chat_model is not None:
+        return _chat_model
+    
+    model_names = [
+        'gemini-flash-latest',
+        'gemini-2.5-flash',
+        'gemini-2.0-flash',
+        'gemini-pro-latest',
+        'gemini-2.5-pro',
+        'gemini-2.0-pro-exp'
+    ]
+    
+    for model_name in model_names:
+        try:
+            _chat_model = genai.GenerativeModel(model_name)
+            print(f"✓ Chat model initialized: {model_name}")
+            return _chat_model
+        except Exception as e:
+            print(f"✗ Failed to initialize {model_name}: {str(e)}")
+            continue
+    
+    # If all predefined models fail, try to list and use first available
+    try:
+        available_models = genai.list_models()
+        for model in available_models:
+            if 'generateContent' in model.supported_generation_methods:
+                try:
+                    model_name = model.name.replace('models/', '')
+                    _chat_model = genai.GenerativeModel(model_name)
+                    print(f"✓ Using available model: {model_name}")
+                    return _chat_model
+                except:
+                    continue
+    except Exception as e:
+        print(f"Failed to list models: {str(e)}")
+    
+    raise Exception("Could not initialize any Gemini model for chat")
+
 class ChatRequest(BaseModel):
     message: str
     sign_context: Optional[Dict[str, Any]] = None
@@ -27,25 +72,10 @@ async def chat_with_bot(request: ChatRequest):
     - **sign_context**: Context about the detected sign (optional)
     """
     try:
-        # Initialize Gemini model
-        model_names = [
-            'gemini-1.5-flash-latest',
-            'gemini-1.5-flash',
-            'gemini-1.5-pro-latest',
-            'gemini-1.5-pro',
-            'gemini-pro'
-        ]
+        print(f"📩 Chat request received: {request.message}")
         
-        model = None
-        for model_name in model_names:
-            try:
-                model = genai.GenerativeModel(model_name)
-                break
-            except:
-                continue
-        
-        if not model:
-            raise Exception("Could not initialize Gemini model")
+        # Get or initialize Gemini model
+        model = _get_or_initialize_model()
         
         # Build context-aware prompt
         context = ""
@@ -72,16 +102,58 @@ Help the user with their questions about signs, traffic safety, symbols, and rel
 Be helpful, concise, and informative.
 """
         
-        # Generate response
+        # Generate response with retry mechanism
         prompt = f"{context}\n\nUser question: {request.message}\n\nAssistant:"
         
-        response = model.generate_content(prompt)
+        print("🤖 Generating AI response...")
         
-        return ChatResponse(message=response.text.strip())
+        # Try generating content with fallback to other models
+        response = None
+        last_error = None
+        model_names = [
+            'gemini-flash-latest',
+            'gemini-2.5-flash',
+            'gemini-2.0-flash',
+            'gemini-pro-latest',
+            'gemini-2.5-pro',
+            'gemini-2.0-pro-exp'
+        ]
+        
+        for attempt, model_name in enumerate(model_names):
+            try:
+                temp_model = genai.GenerativeModel(model_name)
+                response = temp_model.generate_content(prompt)
+                print(f"✓ Response generated with {model_name}")
+                # Update global model on success
+                global _chat_model
+                _chat_model = temp_model
+                break
+            except Exception as e:
+                last_error = e
+                print(f"✗ Attempt {attempt + 1} failed with {model_name}: {str(e)}")
+                continue
+        
+        if not response:
+            raise Exception(f"All model attempts failed. Last error: {str(last_error)}")
+        
+        # Extract text from response safely
+        response_text = ""
+        if hasattr(response, 'text'):
+            response_text = response.text
+        elif hasattr(response, 'parts'):
+            response_text = ''.join([part.text for part in response.parts])
+        else:
+            response_text = str(response)
+        
+        print(f"📤 Sending response: {response_text[:100]}...")
+        
+        return ChatResponse(message=response_text.strip())
         
     except Exception as e:
+        error_msg = f"Failed to process chat message: {str(e)}"
+        print(f"❌ Error: {error_msg}")
         raise HTTPException(
             status_code=500,
-            detail=f"Failed to process chat message: {str(e)}"
+            detail=error_msg
         )
 

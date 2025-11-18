@@ -62,5 +62,14 @@ export const deleteScan = async (scanId) => {
   return response.data;
 };
 
+// Chatbot API
+export const chatWithBot = async (message, signContext) => {
+  const response = await api.post('/chat', {
+    message,
+    sign_context: signContext,
+  });
+  return response.data;
+};
+
 export default api;
 

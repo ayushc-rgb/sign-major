@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
 
-from app.routers import scan, translate
+from app.routers import scan, translate, chat
 from app.database.db import engine, Base
 
 # Load environment variables
@@ -32,6 +32,7 @@ app.add_middleware(
 # Include routers
 app.include_router(scan.router, prefix="/api", tags=["scan"])
 app.include_router(translate.router, prefix="/api", tags=["translate"])
+app.include_router(chat.router, prefix="/api", tags=["chat"])
 
 @app.get("/")
 async def root():

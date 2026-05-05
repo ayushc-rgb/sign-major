@@ -23,20 +23,23 @@ const CameraCapture = ({ onCapture, disabled }) => {
     try {
       setError(null);
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode, width: { ideal: 1920 }, height: { ideal: 1080 } },
+        video: { facingMode: { ideal: facingMode }, width: { ideal: 1920 }, height: { ideal: 1080 } },
         audio: false,
       });
 
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
-        setStream(mediaStream);
-        setCameraActive(true);
-      }
+      setStream(mediaStream);
+      setCameraActive(true);
     } catch (err) {
       setError('Failed to access camera. Please check permissions.');
       console.error('Camera error:', err);
     }
   };
+
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [stream, cameraActive]);
 
   const stopCamera = () => {
     if (stream) {
@@ -124,6 +127,7 @@ const CameraCapture = ({ onCapture, disabled }) => {
             <video
               ref={videoRef}
               autoPlay
+              muted
               playsInline
               style={{
                 width: '100%',

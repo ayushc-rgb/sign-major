@@ -16,9 +16,10 @@ import SmartToyIcon from '@mui/icons-material/SmartToy';
 import PersonIcon from '@mui/icons-material/Person';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import CloseIcon from '@mui/icons-material/Close';
 import { chatWithBot } from '../services/api';
 
-const Chatbot = ({ signData }) => {
+const Chatbot = ({ signData, onClose }) => {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -113,7 +114,7 @@ const Chatbot = ({ signData }) => {
         overflow: 'hidden',
         transition: 'all 0.3s ease',
         zIndex: 1000,
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: 'linear-gradient(135deg, #1E3A5F 0%, #1565C0 100%)',
       }}
     >
       {/* Header */}
@@ -129,7 +130,7 @@ const Chatbot = ({ signData }) => {
         onClick={() => setExpanded(!expanded)}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Avatar sx={{ backgroundColor: 'white', color: '#667eea' }}>
+          <Avatar sx={{ backgroundColor: 'white', color: '#1E3A5F' }}>
             <SmartToyIcon />
           </Avatar>
           <Box>
@@ -141,9 +142,16 @@ const Chatbot = ({ signData }) => {
             </Typography>
           </Box>
         </Box>
-        <IconButton sx={{ color: 'white' }}>
-          {expanded ? <ExpandMoreIcon /> : <ExpandLessIcon />}
-        </IconButton>
+        <Box sx={{ display: 'flex', gap: 0.5 }}>
+          <IconButton sx={{ color: 'white' }} onClick={() => setExpanded(!expanded)}>
+            {expanded ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+          </IconButton>
+          {onClose && (
+            <IconButton sx={{ color: 'white' }} onClick={(e) => { e.stopPropagation(); onClose(); }}>
+              <CloseIcon />
+            </IconButton>
+          )}
+        </Box>
       </Box>
 
       {/* Chat Content */}
@@ -169,7 +177,7 @@ const Chatbot = ({ signData }) => {
               }}
             >
               {message.role === 'assistant' && (
-                <Avatar sx={{ backgroundColor: '#667eea', width: 32, height: 32 }}>
+                <Avatar sx={{ backgroundColor: '#1E3A5F', width: 32, height: 32 }}>
                   <SmartToyIcon fontSize="small" />
                 </Avatar>
               )}
@@ -178,7 +186,7 @@ const Chatbot = ({ signData }) => {
                 sx={{
                   p: 2,
                   maxWidth: '75%',
-                  backgroundColor: message.role === 'user' ? '#667eea' : '#f5f5f5',
+                  backgroundColor: message.role === 'user' ? '#1E3A5F' : '#f5f5f5',
                   color: message.role === 'user' ? 'white' : 'black',
                   borderRadius: 2,
                 }}
@@ -199,7 +207,7 @@ const Chatbot = ({ signData }) => {
                 </Typography>
               </Paper>
               {message.role === 'user' && (
-                <Avatar sx={{ backgroundColor: '#764ba2', width: 32, height: 32 }}>
+                <Avatar sx={{ backgroundColor: '#1565C0', width: 32, height: 32 }}>
                   <PersonIcon fontSize="small" />
                 </Avatar>
               )}
@@ -208,11 +216,11 @@ const Chatbot = ({ signData }) => {
           
           {loading && (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Avatar sx={{ backgroundColor: '#667eea', width: 32, height: 32 }}>
+              <Avatar sx={{ backgroundColor: '#1E3A5F', width: 32, height: 32 }}>
                 <SmartToyIcon fontSize="small" />
               </Avatar>
               <Paper elevation={1} sx={{ p: 2, backgroundColor: '#f5f5f5' }}>
-                <CircularProgress size={20} sx={{ color: '#667eea' }} />
+                <CircularProgress size={20} sx={{ color: '#1E3A5F' }} />
               </Paper>
             </Box>
           )}
@@ -236,7 +244,7 @@ const Chatbot = ({ signData }) => {
                   sx={{
                     cursor: 'pointer',
                     '&:hover': {
-                      backgroundColor: '#667eea',
+                      backgroundColor: '#1E3A5F',
                       color: 'white',
                     },
                   }}
@@ -275,10 +283,10 @@ const Chatbot = ({ signData }) => {
             onClick={() => handleSend()}
             disabled={!input.trim() || loading}
             sx={{
-              backgroundColor: '#667eea',
+              backgroundColor: '#1E3A5F',
               color: 'white',
               '&:hover': {
-                backgroundColor: '#5568d3',
+                backgroundColor: '#0D47A1',
               },
               '&:disabled': {
                 backgroundColor: '#e0e0e0',

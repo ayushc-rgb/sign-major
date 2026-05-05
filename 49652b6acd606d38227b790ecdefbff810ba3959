@@ -1,0 +1,14 @@
+frontend/index.html
+  63cc2294-4c23-4927-a61f-d3f7a4779a3a:2026-05-05T07:25:11.910Z 8-11
+frontend/src/components/CameraCapture.jsx
+  63cc2294-4c23-4927-a61f-d3f7a4779a3a:2026-05-05T07:17:13.234Z 26,30-31,38-42,130
+frontend/src/components/Chatbot.jsx
+  63cc2294-4c23-4927-a61f-d3f7a4779a3a:2026-05-05T07:24:16.529Z 19,22,117,133,145-154,180,189,210,219,223,247,286,289
+frontend/src/components/Layout.jsx
+  63cc2294-4c23-4927-a61f-d3f7a4779a3a:2026-05-05T07:27:24.606Z 1,7,15-17,21-23,26,29-36,38-48,50-59,61,63-72,83,86-88,92-93
+frontend/src/pages/Home.jsx
+  63cc2294-4c23-4927-a61f-d3f7a4779a3a:2026-05-05T07:32:22.463Z 18-24,32-63,71-72,79,88-91,94,106,110,116,121,124-140,142,144,151,153-156,158,164,170-174,177-196,198-199,206,210,216-218,222-230,233-240,242-245,249,253,256,260,265,272,278-279,287,294-295
+frontend/src/theme.js
+  63cc2294-4c23-4927-a61f-d3f7a4779a3a:2026-05-05T07:23:35.716Z 3-11,17-20,23-26,29-30,32-34,36-40,43-86,94-97,100-103,106-111,113,115-125,127-138
+---
+{"schema_version": "authorship/3.0.0", "base_commit_sha": "HEAD~1", "prompts": {"63cc2294-4c23-4927-a61f-d3f7a4779a3a:2026-05-05T07:25:11.910Z": {"agent_id": {"tool": "claude_code", "model": ""}, "human_author": "ayush.c@razorpay.com", "accepted_lines": 4, "overriden_lines": 0}, "63cc2294-4c23-4927-a61f-d3f7a4779a3a:2026-05-05T07:17:13.234Z": {"agent_id": {"tool": "claude_code", "model": ""}, "human_author": "ayush.c@razorpay.com", "accepted_lines": 9, "overriden_lines": 0}, "63cc2294-4c23-4927-a61f-d3f7a4779a3a:2026-05-05T07:24:16.529Z": {"agent_id": {"tool": "claude_code", "model": ""}, "human_author": "ayush.c@razorpay.com", "accepted_lines": 22, "overriden_lines": 0}, "63cc2294-4c23-4927-a61f-d3f7a4779a3a:2026-05-05T07:27:24.606Z": {"agent_id": {"tool": "claude_code", "model": ""}, "human_author": "ayush.c@razorpay.com", "accepted_lines": 55, "overriden_lines": 0}, "63cc2294-4c23-4927-a61f-d3f7a4779a3a:2026-05-05T07:32:22.463Z": {"agent_id": {"tool": "claude_code", "model": ""}, "human_author": "ayush.c@razorpay.com", "accepted_lines": 141, "overriden_lines": 0}, "63cc2294-4c23-4927-a61f-d3f7a4779a3a:2026-05-05T07:23:35.716Z": {"agent_id": {"tool": "claude_code", "model": ""}, "human_author": "ayush.c@razorpay.com", "accepted_lines": 109, "overriden_lines": 0}}}

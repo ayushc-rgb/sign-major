@@ -4,9 +4,6 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 // Scan API
@@ -14,11 +11,7 @@ export const scanImage = async (file) => {
   const formData = new FormData();
   formData.append('file', file);
   
-  const response = await api.post('/scan', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  const response = await api.post('/scan', formData);
   
   return response.data;
 };
